@@ -2,7 +2,8 @@ namespace LZMCompressor;
 
 public class LzwDecoder
 {
-    private const int BufferSize = 1 << 16;
+    // private const int BytesToRead = 1 << 12;
+    // private const int BufferSize = 1 << 16;
 
     private readonly int maxDictionarySize;
     private BitArrayReader buffer;
@@ -43,11 +44,6 @@ public class LzwDecoder
             if (d.Count >= MinBitsPerCode)
                 bitsPerCode++;
         }
-    }
-
-    private void ReadToBufferIfNecessary(BinaryReader reader)
-    {
-        
     }
 
     private static Dictionary<int, string> InitializeDictionary()
