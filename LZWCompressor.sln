@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LZWCompressor", "LZWCompressor\LZWCompressor.csproj", "{B461E752-EFB4-4D02-9A4B-050E7ACCD84A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B461E752-EFB4-4D02-9A4B-050E7ACCD84A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B461E752-EFB4-4D02-9A4B-050E7ACCD84A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B461E752-EFB4-4D02-9A4B-050E7ACCD84A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B461E752-EFB4-4D02-9A4B-050E7ACCD84A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
