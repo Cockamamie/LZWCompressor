@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Text;
-
 namespace LZMCompressor;
 
 public class LzwDecoder
 {
     private const int BufferSize = 1 << 16;
 
-    private readonly int dictionarySize;
+    private readonly int maxDictionarySize;
     private BitArrayReader buffer;
     private int bitsPerCode = 9;
 
-    public LzwDecoder(int dictionarySize)
+    public LzwDecoder(int maxDictionarySize)
     {
-        this.dictionarySize = dictionarySize;
-        buffer = new BitArrayReader(BufferSize);
+        this.maxDictionarySize = maxDictionarySize;
+        //buffer = new BitArrayReader(BufferSize);
     }
 
     private int MinBitsPerCode => 1 << bitsPerCode;
@@ -39,7 +36,7 @@ public class LzwDecoder
             var v = d.ContainsKey(code) ? d[code] : w + w[0];
             writer.Write(v);
             var toAdd = w + v[0];
-            if (toAdd.Length > 1)
+            if (toAdd.Length > 1 && d.Count <= maxDictionarySize)
                 d.Add(d.Count, w + v[0]);
             w = v;
             

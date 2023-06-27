@@ -5,7 +5,7 @@ const string encoderInputPath = @"..\..\..\Test\Encoder\input.txt";
 const string encoderOutputPath = @"..\..\..\Test\Encoder\output";
 const string decoderInputPath = @"..\..\..\Test\Decoder\input";
 const string decoderOutputPath = @"..\..\..\Test\Decoder\output.txt";
-const int maxDictionarySize = 1 << 12;
+const int maxDictionarySize = 1 << 16;
 
 var encoder = new LzwEncoder(maxDictionarySize);
 using var sr = new StreamReader(encoderInputPath);

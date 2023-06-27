@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Text;
 
 namespace LZMCompressor;
 
@@ -8,17 +7,17 @@ public class LzwEncoder
     private const int MinBytesToWrite = 1 << 12;
     private const int BufferSize = 1 << 16;
 
-    private readonly int dictionarySize;
+    private readonly int maxDictionarySize;
     private readonly BitArrayWriter buffer;
-    private int bitsForCode = 9;
+    private int bitsPerCode = 9;
 
-    public LzwEncoder(int dictionarySize)
+    public LzwEncoder(int maxDictionarySize)
     {
-        this.dictionarySize = dictionarySize;
+        this.maxDictionarySize = maxDictionarySize;
         buffer = new BitArrayWriter(BufferSize);
     }
 
-    private int MinSizeForCode => 1 << bitsForCode;
+    private int MinBitsPerCode => 1 << bitsPerCode;
 
     public void Encode(StreamReader reader, BinaryWriter writer)
     {
@@ -37,11 +36,14 @@ public class LzwEncoder
             {
                 WriteCodeToBuffer(d[w]);
                 WriteFromBufferIfNecessary(writer);
-                d.Add(wa, d.Count);
+                if (d.Count <= maxDictionarySize)
+                {
+                    d.Add(wa, d.Count);
+                }
                 w = currentSymbol.ToString();
             }
-            if (d.Count > MinSizeForCode)
-                bitsForCode++;
+            if (d.Count > MinBitsPerCode)
+                bitsPerCode++;
         }
         
         if (w != string.Empty)
@@ -73,7 +75,7 @@ public class LzwEncoder
     {
         var bits = new BitArray(new[] { code })
         {
-            Length = bitsForCode
+            Length = bitsPerCode
         };
         buffer.Write(bits);
     }
