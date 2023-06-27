@@ -24,7 +24,6 @@ public class LzwDecoder
         var d = InitializeDictionary();
         buffer = new BitArrayReader(input);
         var w = string.Empty;
-        var v = string.Empty;
         while (buffer.ReadOffset < buffer.BufferSize)
         {
             int code;
@@ -36,14 +35,8 @@ public class LzwDecoder
             {
                 break;
             }
-            if (d.ContainsKey(code))
-            {
-                v = d[code];
-            }
-            else
-            {
-                v = w + w[0];
-            }
+
+            var v = d.ContainsKey(code) ? d[code] : w + w[0];
             writer.Write(v);
             var toAdd = w + v[0];
             if (toAdd.Length > 1)
@@ -52,29 +45,6 @@ public class LzwDecoder
             
             if (d.Count >= MinBitsPerCode)
                 bitsPerCode++;
-        }
-    }
-
-    public void Decode(List<int> encoded, StreamWriter writer)
-    {
-        var d = InitializeDictionary();
-        var w = string.Empty;
-        var v = string.Empty;
-        foreach (var code in encoded)
-        {
-            if (d.ContainsKey(code))
-            {
-                v = d[code];
-            }
-            else
-            {
-                v = w + w[0];
-            }
-            writer.Write(v);
-            var toAdd = w + v[0];
-            if (toAdd.Length > 1)
-                d.Add(d.Count, w + v[0]);
-            w = v;
         }
     }
 

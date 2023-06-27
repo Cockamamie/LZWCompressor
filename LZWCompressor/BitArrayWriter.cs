@@ -44,8 +44,12 @@ public class BitArrayWriter
     public IEnumerable<byte> ConvertToBytes()
     {
         var bytesCount = Offset / 8;
-        var integerBytesBitArray = new BitArray(buffer);
-        integerBytesBitArray.Length = bytesCount * 8;
+        var bitsCount = bytesCount * 8;
+        var integerBytesBitArray = new BitArray(bitsCount);
+        for (var i = 0; i < bitsCount; i++)
+        {
+            integerBytesBitArray.Set(i, buffer[i]);
+        }
         var res = new byte[bytesCount];
         integerBytesBitArray.CopyTo(res, 0);
         return res;

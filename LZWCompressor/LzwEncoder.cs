@@ -20,19 +20,14 @@ public class LzwEncoder
 
     private int MinSizeForCode => 1 << bitsForCode;
 
-    public List<int> Encode(StreamReader reader, BinaryWriter writer)
+    public void Encode(StreamReader reader, BinaryWriter writer)
     {
         var d = InitializeDictionary();
-        // var sb = new StringBuilder();
-        // var previousSubstring = string.Empty;
-        var encoded = new List<int>();
         var w = string.Empty;
         
         while (reader.Peek() >= 0)
         {
             var currentSymbol = (char) reader.Read();
-            if (d.Count == 512)
-                ;
             var wa = w + currentSymbol;
             if (d.ContainsKey(wa))
             {
@@ -40,43 +35,21 @@ public class LzwEncoder
             }
             else
             {
-                encoded.Add(d[w]);
                 WriteCodeToBuffer(d[w]);
                 WriteFromBufferIfNecessary(writer);
                 d.Add(wa, d.Count);
                 w = currentSymbol.ToString();
             }
-            // var currentSymbol = (char) reader.Read();
-            // sb.Append(currentSymbol);
-            // var currentSubstring = sb.ToString();
-            // if (!d.ContainsKey(currentSubstring))
-            // {
-            //     encoded.Add(d[previousSubstring]);
-            //     if (d.Count < dictionarySize)
-            //     {
-            //         d.Add(currentSubstring, d.Count);
-            //     }
-            //
-            //     sb.Clear();
-            //     sb.Append(currentSymbol);
-            // }
-            //
-            // previousSubstring = currentSubstring;
             if (d.Count > MinSizeForCode)
                 bitsForCode++;
         }
-
-        // if (sb.Length > 0)
-        //     encoded.Add(d[sb.ToString()]);
+        
         if (w != string.Empty)
         {
             WriteCodeToBuffer(d[w]);
-            encoded.Add(d[w]);
         }
         buffer.PadLastByteWithLeadingZeros();
         WriteFromBufferIfNecessary(writer, true);
-        
-        return encoded;
     }
 
     private void WriteFromBufferIfNecessary(BinaryWriter writer, bool writeAnySize = false)

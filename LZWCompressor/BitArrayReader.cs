@@ -28,6 +28,9 @@ public class BitArrayReader
 
     public int ReadBitsToInt32(int bitsCount)
     {
+        if (bitsCount > 1 << 5)
+            throw new ArgumentException("", nameof(bitsCount));
+        
         var readToOffset = ReadOffset + bitsCount;
         var bits = new BitArray(bitsCount);
         var index = 0;
@@ -38,14 +41,8 @@ public class BitArrayReader
             index++;
             ReadOffset++;
         }
-
-        // bits.Length += 32 - bitsCount;
-        // var bytes = ConvertToBytes(bits).ToArray();
-        // var bytes = new byte[4];
-        // bits.CopyTo(bytes, 0);
-        // return BitConverter.ToInt32(bytes);
+        
         var intArray = new int[1];
-
         bits.CopyTo(intArray, 0);
         return intArray.First();
     }
